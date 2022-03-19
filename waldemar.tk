@@ -1,0 +1,49 @@
+upstream voteit {
+    server 10.0.0.109:6543;
+}
+
+server {
+
+    server_name waldemar.tk www.waldemar.tk;
+
+    root /mnt/web/waldemar.tk/html;
+
+    location / {
+        proxy_pass http://10.0.0.5;
+	    proxy_set_header Host $host;
+    	proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    listen [::]:443 ssl;
+    listen 443 ssl;
+    ssl_certificate /root/cert.pem;
+    ssl_certificate_key /root/privkey.key;
+}
+
+server {
+
+    server_name voteit.waldemar.tk;
+    
+    location / {
+            proxy_pass http://voteit;
+
+            proxy_set_header        Host $host;
+            proxy_set_header        X-Real-IP $remote_addr;
+            proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header        X-Forwarded-Proto $scheme;
+
+            client_max_body_size    10m;
+            client_body_buffer_size 128k;
+            proxy_connect_timeout   60s;
+            proxy_send_timeout      90s;
+            proxy_read_timeout      90s;
+            proxy_buffering         off;
+            proxy_temp_file_write_size 64k;
+            proxy_redirect          off;
+        }
+
+    listen [::]:443 ssl;
+    listen 443 ssl;
+    ssl_certificate /root/cert.pem;
+    ssl_certificate_key /root/privkey.key;
+}
