@@ -86,3 +86,17 @@ server {
     ssl_certificate /root/cert.pem;
     ssl_certificate_key /root/privkey.key;
 }
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name vsc.eliasson.tk;
+
+    location / {
+      proxy_pass http://10.0.0.5:8080/;
+      proxy_set_header Host $host;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection upgrade;
+      proxy_set_header Accept-Encoding gzip;
+    }
+}
