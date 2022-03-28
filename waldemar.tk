@@ -22,6 +22,24 @@ server {
 
 server {
 
+    server_name beta.waldemar.tk;
+
+    root /mnt/web/waldemar.tk/html;
+
+    location / {
+        proxy_pass http://10.0.0.5:8080;
+	    proxy_set_header Host $host;
+    	proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    listen [::]:443 ssl;
+    listen 443 ssl;
+    ssl_certificate /root/cert.pem;
+    ssl_certificate_key /root/privkey.key;
+}
+
+server {
+
     server_name voteit.waldemar.tk;
     
     location / {
@@ -40,7 +58,7 @@ server {
             proxy_buffering         off;
             proxy_temp_file_write_size 64k;
             proxy_redirect          off;
-        }
+    }
 
     listen [::]:443 ssl;
     listen 443 ssl;
