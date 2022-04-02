@@ -102,3 +102,19 @@ server {
       proxy_set_header Accept-Encoding gzip;
     }
 }
+
+server {
+    listen [::]:443 ssl;
+    listen 443 ssl;
+    ssl_certificate /root/cert.pem;
+    ssl_certificate_key /root/privkey.key;
+    server_name docker.eliasson.tk;
+
+    location / {
+      proxy_pass https://10.0.0.5:9443/;
+      proxy_set_header Host $host;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection upgrade;
+      proxy_set_header Accept-Encoding gzip;
+    }
+}
