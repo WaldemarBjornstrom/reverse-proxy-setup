@@ -15,6 +15,21 @@ server {
 }
 
 server {
+    server_name _;
+    listen 443 default_server;
+    listen [::]:443 default_server;
+    ssl_certificate /root/cert.pem;
+    ssl_certificate_key /root/privkey.key;
+    
+    index index.html;
+    root /var/www/html;
+    
+    location / {
+        return 301 http://90.225.130.87$request_uri;
+    }
+}
+
+server {
     server_name eliasson.tk www.eliasson.tk;
 
     index index.html;
