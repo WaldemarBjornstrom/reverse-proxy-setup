@@ -3,6 +3,18 @@ upstream "octoprint" {
 }
 
 server {
+	server_name _;
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	index index.html
+	root /var/www/html;
+	
+	location / {
+	    try_files $uri $uri/ =404;
+	}
+}
+
+server {
     server_name eliasson.tk www.eliasson.tk;
 
     index index.html;
