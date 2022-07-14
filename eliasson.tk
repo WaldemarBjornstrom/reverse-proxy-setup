@@ -145,3 +145,20 @@ server {
       proxy_set_header Accept-Encoding gzip;
     }
 }
+
+server {
+    listen [::]:443 ssl;
+    listen 443 ssl;
+    ssl_certificate /root/cert.pem;
+    ssl_certificate_key /root/privkey.key;
+    server_name search.eliasson.tk;
+
+    location / {
+      proxy_pass http://10.0.0.192/;
+      proxy_set_header Host $host;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection upgrade;
+      proxy_set_header Accept-Encoding gzip;
+    }
+}
+
